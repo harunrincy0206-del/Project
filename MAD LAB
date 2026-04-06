@@ -1,0 +1,133 @@
+XML
+<Button
+    android:id="@+id/btn"
+    android:text="Click Me"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+Java
+Button b = findViewById(R.id.btn);
+b.setOnClickListener(v -> b.setText("Clicked"));
+(b) Checkbox + Radio
+XML
+<CheckBox android:id="@+id/chk" android:text="Agree"/>
+
+<RadioGroup android:id="@+id/radioGroup">
+    <RadioButton android:text="Male"/>
+    <RadioButton android:text="Female"/>
+</RadioGroup>
+Java
+CheckBox c = findViewById(R.id.chk);
+if(c.isChecked()){
+    // do something
+}
+🧪 3. GUI VALIDATION
+Login Validation
+XML
+<EditText android:id="@+id/user" android:hint="Username"/>
+<EditText android:id="@+id/pass" android:hint="Password"/>
+<Button android:id="@+id/login" android:text="Login"/>
+Java
+Button b = findViewById(R.id.login);
+
+b.setOnClickListener(v -> {
+    String u = ((EditText)findViewById(R.id.user)).getText().toString();
+    String p = ((EditText)findViewById(R.id.pass)).getText().toString();
+
+    if(u.equals("admin") && p.equals("1234")){
+        Toast.makeText(this,"Success",Toast.LENGTH_SHORT).show();
+    } else {
+        Toast.makeText(this,"Invalid",Toast.LENGTH_SHORT).show();
+    }
+});
+🧪 4. LIST VIEW
+XML
+<ListView android:id="@+id/list"/>
+Java
+ListView l = findViewById(R.id.list);
+
+String arr[] = {"A","B","C"};
+
+ArrayAdapter ad = new ArrayAdapter(this,
+android.R.layout.simple_list_item_1, arr);
+
+l.setAdapter(ad);
+🧪 5. LINEAR LAYOUT (FORM)
+XML
+<LinearLayout
+    android:orientation="vertical">
+
+<EditText android:hint="Name"/>
+<EditText android:hint="Age"/>
+<Button android:text="Submit"/>
+
+</LinearLayout>
+🧪 6. IMAGE
+XML
+<ImageView
+    android:src="@drawable/ic_launcher"
+    android:layout_width="200dp"
+    android:layout_height="200dp"/>
+
+<ImageButton
+    android:src="@drawable/ic_launcher"/>
+🧪 7. RELATIVE LAYOUT + WEBVIEW
+(a) Calculator (Simple Add)
+XML
+<EditText android:id="@+id/a"/>
+<EditText android:id="@+id/b"/>
+<Button android:id="@+id/add" android:text="Add"/>
+<TextView android:id="@+id/result"/>
+Java
+Button b = findViewById(R.id.add);
+
+b.setOnClickListener(v -> {
+    int a = Integer.parseInt(((EditText)findViewById(R.id.a)).getText().toString());
+    int c = Integer.parseInt(((EditText)findViewById(R.id.b)).getText().toString());
+
+    ((TextView)findViewById(R.id.result)).setText(""+(a+c));
+});
+(b) WebView
+XML
+<WebView android:id="@+id/web"/>
+Java
+WebView w = findViewById(R.id.web);
+w.loadUrl("https://www.google.com");
+🧪 8. PICKERS
+Date Picker
+Java
+Calendar c = Calendar.getInstance();
+
+DatePickerDialog d = new DatePickerDialog(this,
+(datePicker, y, m, d1) -> {
+    Toast.makeText(this,y+"-"+m+"-"+d1,Toast.LENGTH_SHORT).show();
+},
+c.get(Calendar.YEAR),
+c.get(Calendar.MONTH),
+c.get(Calendar.DAY_OF_MONTH));
+
+d.show();
+Time Picker
+TimePickerDialog t = new TimePickerDialog(this,
+(view, h, m) -> {
+    Toast.makeText(this,h+":"+m,Toast.LENGTH_SHORT).show();
+},12,0,true);
+
+t.show();
+🧪 9. PAGE NAVIGATION
+Intent
+Java
+Intent i = new Intent(MainActivity.this, SecondActivity.class);
+startActivity(i);
+🧪 10. AUDIO & VIDEO
+Audio
+MediaPlayer mp = MediaPlayer.create(this, R.raw.song);
+mp.start();
+Video
+XML
+<VideoView android:id="@+id/video"/>
+Java
+VideoView v = findViewById(R.id.video);
+
+Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video);
+v.setVideoURI(uri);
+v.start();
