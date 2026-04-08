@@ -1,0 +1,30 @@
+using UnityEngine;
+
+public class WaveDeformer : MonoBehaviour
+{
+    public float amplitude = 0.5f;
+    public float speed = 1f;
+
+    Vector3[] originalVertices;
+    Mesh mesh;
+
+    void Start()
+    {
+        mesh = GetComponent<MeshFilter>().mesh;
+        originalVertices = mesh.vertices;
+    }
+
+    void Update()
+    {
+        Vector3[] v = new Vector3[originalVertices.Length];
+
+        for (int i = 0; i < v.Length; i++)
+        {
+            v[i] = originalVertices[i];
+            v[i].y = Mathf.Sin(Time.time * speed + v[i].x) * amplitude;
+        }
+
+        mesh.vertices = v;
+        mesh.RecalculateNormals();
+    }
+}
