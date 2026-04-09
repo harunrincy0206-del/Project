@@ -1,0 +1,62 @@
+8(a) Hill Cipher
+#include <stdio.h>
+
+int main() {
+    int key[2][2] = {{3, 3}, {2, 5}};
+    char text[3];
+    int result[2];
+
+    scanf("%s", text);
+
+    for(int i = 0; i < 2; i++) {
+        result[i] = 0;
+        for(int j = 0; j < 2; j++)
+            result[i] += key[i][j] * (text[j] - 'A');
+        result[i] %= 26;
+    }
+
+    printf("%c%c\n", result[0] + 'A', result[1] + 'A');
+    return 0;
+}
+✅ 8(b) Vigenere Cipher
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char text[100], key[100];
+    int i, j;
+
+    scanf("%s", text);
+    scanf("%s", key);
+
+    for(i = 0, j = 0; text[i] != '\0'; i++, j++) {
+        if(j == strlen(key))
+            j = 0;
+        text[i] = ((text[i] - 'A' + key[j] - 'A') % 26) + 'A';
+    }
+
+    printf("%s\n", text);
+    return 0;
+}
+✅ 9(a) RSA
+#include <stdio.h>
+
+int power(int base, int exp, int mod) {
+    int result = 1;
+    for(int i = 0; i < exp; i++)
+        result = (result * base) % mod;
+    return result;
+}
+
+int main() {
+    int p = 3, q = 11;
+    int n = p * q;
+    int e = 3, d = 7;
+    int msg = 5;
+
+    int enc = power(msg, e, n);
+    int dec = power(enc, d, n);
+
+    printf("%d\n%d\n", enc, dec);
+    return 0;
+}
