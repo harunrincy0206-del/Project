@@ -1,0 +1,15 @@
+STEP-1:open terminal 
+STEP-2: Type The Below Command
+sudo apt-get install xprobe2
+STEP-3: Type The Below Command
+sudo xprobe2 10.1.130.48
+
+iI)NMAP
+STEP-1:open terminal 
+STEP-2: Type The Below Command
+sudo apt-get install nmap
+STEP-3: Type The Below Command
+nmap --version
+STEP-3: Type The Below Command
+sudo nmap 10.1.130.48
+
