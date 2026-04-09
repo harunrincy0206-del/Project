@@ -1,0 +1,49 @@
+MD5....
+#include <stdio.h>
+#include <string.h>
+
+// simple function to convert string to pseudo hash (for lab demo)
+void md5(char input[]) {
+    unsigned int hash = 0;
+
+    for(int i = 0; input[i] != '\0'; i++) {
+        hash = hash * 31 + input[i];
+    }
+
+    printf("MD5 Hash: %08x%08x%08x%08x\n",
+           hash, hash+1, hash+2, hash+3);
+}
+
+int main() {
+    char text[100];
+
+    printf("Enter message: ");
+    scanf("%s", text);
+
+    md5(text);
+
+    return 0;
+}
+DIFFE HELLMAN..........
+#include <stdio.h>
+
+int power(int base, int exp, int mod) {
+    int result = 1;
+    for(int i = 0; i < exp; i++)
+        result = (result * base) % mod;
+    return result;
+}
+
+int main() {
+    int p = 23, g = 5;
+    int a = 6, b = 15;
+
+    int A = power(g, a, p);
+    int B = power(g, b, p);
+
+    int key1 = power(B, a, p);
+    int key2 = power(A, b, p);
+
+    printf("%d\n%d\n", key1, key2);
+    return 0;
+}
