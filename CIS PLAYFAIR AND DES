@@ -1,0 +1,144 @@
+PLAYFAIR CIPHER...........................................
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char keyTable[5][5];
+
+// Function to generate key table
+void generateKeyTable(char key[]) {
+    int used[26] = {0};
+    int i, j, k = 0;
+
+    // Treat J as I
+    for(i = 0; key[i] != '\0'; i++) {
+        char ch = toupper(key[i]);
+        if(ch == 'J') ch = 'I';
+        if(ch >= 'A' && ch <= 'Z' && !used[ch - 'A']) {
+            keyTable[k / 5][k % 5] = ch;
+            used[ch - 'A'] = 1;
+            k++;
+        }
+    }
+
+    for(i = 0; i < 26; i++) {
+        if(i == ('J' - 'A')) continue;
+        if(!used[i]) {
+            keyTable[k / 5][k % 5] = 'A' + i;
+            k++;
+        }
+    }
+}
+
+// Find position of character in key table
+void findPosition(char ch, int *row, int *col) {
+    if(ch == 'J') ch = 'I';
+    for(int i = 0; i < 5; i++) {
+        for(int j = 0; j < 5; j++) {
+            if(keyTable[i][j] == ch) {
+                *row = i;
+                *col = j;
+                return;
+            }
+        }
+    }
+}
+
+// Prepare text (digraphs)
+void prepareText(char input[], char output[]) {
+    int i, j = 0;
+    for(i = 0; input[i] != '\0'; i++) {
+        if(isalpha(input[i])) {
+            output[j++] = toupper(input[i] == 'J' ? 'I' : input[i]);
+        }
+    }
+    output[j] = '\0';
+
+    char temp[100];
+    int k = 0;
+    for(i = 0; i < j; i++) {
+        temp[k++] = output[i];
+        if(i+1 < j && output[i] == output[i+1]) {
+            temp[k++] = 'X';
+        }
+    }
+    if(k % 2 != 0) temp[k++] = 'X';
+    temp[k] = '\0';
+
+    strcpy(output, temp);
+}
+
+// Encrypt
+void encrypt(char text[]) {
+    int i;
+    for(i = 0; text[i] != '\0'; i += 2) {
+        int r1, c1, r2, c2;
+        findPosition(text[i], &r1, &c1);
+        findPosition(text[i+1], &r2, &c2);
+
+        if(r1 == r2) {
+            text[i]   = keyTable[r1][(c1 + 1) % 5];
+            text[i+1] = keyTable[r2][(c2 + 1) % 5];
+        }
+        else if(c1 == c2) {
+            text[i]   = keyTable[(r1 + 1) % 5][c1];
+            text[i+1] = keyTable[(r2 + 1) % 5][c2];
+        }
+        else {
+            text[i]   = keyTable[r1][c2];
+            text[i+1] = keyTable[r2][c1];
+        }
+    }
+}
+
+int main() {
+    char key[100], text[100], prepared[100];
+
+    printf("Enter key: ");
+    scanf("%s", key);
+
+    printf("Enter plaintext: ");
+    scanf("%s", text);
+
+    generateKeyTable(key);
+    prepareText(text, prepared);
+    encrypt(prepared);
+
+    printf("Encrypted: %s\n", prepared);
+
+    return 0;
+}
+DES...................
+
+#include <stdio.h>
+
+int IP[8] = {1,5,2,0,3,7,4,6};
+int FP[8] = {3,0,2,4,6,1,7,5};
+int key[8] = {1,0,1,0,0,0,1,0};
+
+void xor_op(int a[], int b[], int result[], int size) {
+    for(int i = 0; i < size; i++)
+        result[i] = a[i] ^ b[i];
+}
+
+void permute(int input[], int output[], int table[], int size) {
+    for(int i = 0; i < size; i++)
+        output[i] = input[table[i]];
+}
+
+int main() {
+    int plaintext[8] = {1,0,0,1,1,0,1,1};
+    int ip[8], fp[8], temp[8];
+
+    permute(plaintext, ip, IP, 8);
+    xor_op(ip, key, temp, 8);
+    permute(temp, fp, FP, 8);
+
+    printf("Cipher Text: ");
+    for(int i = 0; i < 8; i++)
+        printf("%d", fp[i]);
+
+    printf("\n");
+
+    return 0;
+}
